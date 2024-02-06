@@ -85,9 +85,14 @@ const make = async (display, index) => {
   opts.excludeSwitches('enable-automation')
 
   if (display.pos) {
-    console.log(`Spawning ${url} at ${display.pos}`)
-    opts.addArguments(`--window-position=${display.pos[0]},${display.pos[1]}`);
-    opts.addArguments(`--window-size=${display.pos[2]},${display.pos[3]}`);
+    let x = display.pos[0] + monitor.left;
+    let y = display.pos[1] + monitor.top;
+    let w = display.pos[2];
+    let h = display.pos[3];
+
+    console.log(`Spawning ${url} at ${x},${y} ${w}x${h}`)
+    opts.addArguments(`--window-position=${x},${y}`);
+    opts.addArguments(`--window-size=${w},${h}`);
   } else {
     console.log(`Spawning ${url} at ${monitor.left},${monitor.top}`);
     opts.addArguments(`--window-position=${monitor.left},${monitor.top}`);
