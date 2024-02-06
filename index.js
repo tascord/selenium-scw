@@ -87,6 +87,7 @@ const make = async (display, index) => {
     let y = display.pos[1] + monitor.top;
     let w = display.pos[2];
     let h = display.pos[3];
+    opts.addArguments('--new-window');
 
     console.log(`Spawning ${url} at ${x},${y} ${w}x${h}`)
     opts.addArguments(`--window-position=${x},${y}`);
