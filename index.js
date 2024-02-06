@@ -135,8 +135,8 @@ const restart = async () => {
 }
 
 socket.on('connect', () => {
-  socket.emit('register', {
-    name: require('os').hostname,
+  socket.emit('details', {
+    name: require('os').hostname(),
     intention: 'screen-wall'
   });
   socket.on('ask', (data) => {
