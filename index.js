@@ -142,13 +142,18 @@ socket.on('connect', () => {
   socket.on('ask', (data) => {
     switch (data.job) {
       case "restart": {
+        console.log(`Asked to 'restart'`)
         execSync(`shutdown /r /t 0 /f`);
         break;
       }
       case "update": {
+        console.log(`Asked to 'update'`)
         execSync(`git pull`);
         execSync(`shutdown /r /t 0 /f`)
         break;
+      }
+      default: {
+        console.log(`Unknown job: ${data.job}`)
       }
     }
   })
