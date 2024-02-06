@@ -49,14 +49,14 @@ const spawn_split = (dimensions, displays, index, id) => {
   let rows = displays.map(d => d.span.row[1]).sort().reverse()[0];
   let cols = displays.map(d => d.span.col[1]).sort().reverse()[0];
 
-  let width = dimensions.width / rows;
-  let height = dimensions.height / cols;
+  let width = dimensions.width / cols; // Fix: Use cols instead of rows
+  let height = dimensions.height / rows; // Fix: Use rows instead of cols
 
   displays.forEach((d, i) => {
-    let x = Math.trunc(width * (d.span.row[0] - 1));
-    let y = Math.trunc(height * (d.span.col[0] - 1));
-    let w = Math.trunc(width * (d.span.row[1] - (d.span.row[0] - 1)));
-    let h = Math.trunc(height * (d.span.col[1] - (d.span.col[0] - 1)));
+    let x = Math.trunc(width * (d.span.col[0] - 1)); // Fix: Use col instead of row
+    let y = Math.trunc(height * (d.span.row[0] - 1)); // Fix: Use row instead of col
+    let w = Math.trunc(width * (d.span.col[1] - (d.span.col[0] - 1))); // Fix: Use col instead of row
+    let h = Math.trunc(height * (d.span.row[1] - (d.span.row[0] - 1))); // Fix: Use row instead of col
     make({ id, displays: d.url, pos: [x, y, w, h] }, index + '-' + i);
   });
 }
@@ -141,7 +141,7 @@ const restart = async () => {
 socket.on('connect', () => {
   socket.emit('details', {
     name: require('os').hostname(),
-    intention: 'screen-wall'
+    intention: 'screen-wall for group' + process.argv[2]
   });
   socket.on('do', (data) => {
     switch (data.job) {
