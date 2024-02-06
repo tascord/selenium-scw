@@ -33,7 +33,8 @@ const console = {
 const prelude = async () => {
 
   MONITORS.push(...JSON.parse(await (execSync(path.join(__dirname, 'scw.exe'))).toString()));
-  console.log(`Found ${MONITORS.length} monitor(s):`, MONITORS.map(m => `#${m.id}: ${m.width}x${m.height} @ ${m.left},${m.top}`));
+  console.log(`Found ${MONITORS.length} monitor(s):`);
+  console.log(MONITORS.map(m => `#${m.id}: ${m.width}x${m.height} @ ${m.left},${m.top}`));
 
   const group = process.argv[2];
   const monitors = (await $({ url: `https://raw.githubusercontent.com/RMHEDGE/rm-displays/main/group_${group}.json`, parse: 'json' })).body;
