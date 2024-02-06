@@ -17,7 +17,15 @@ const TRYING = false;
 
 const console = {
   log: (msg) => {
-    socket.emit('log', msg);
+    socket.emit('info', msg);
+    process.stdout.write(msg + '\n');
+  },
+  warn: (msg) => {
+    socket.emit('warn', msg);
+    process.stdout.write(msg + '\n');
+  },
+  error: (msg) => {
+    socket.emit('error', msg);
     process.stdout.write(msg + '\n');
   }
 }
