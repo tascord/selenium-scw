@@ -77,8 +77,8 @@ const make = async (display, index) => {
   const url = display.displays.replaceAll('SCW_DATE', new Date().toLocaleDateString().split('/').reverse().join('-'));
 
   const opts = new Chrome.Options();
-  opts.addArguments('--app=data;')
-  opts.addArguments('--window-name=' + index)
+  opts.addArguments('--app=https://google.com')
+  // opts.addArguments('--window-name=' + index)
   opts.addArguments('--user-data-dir=' + dir)
   opts.excludeSwitches('enable-automation')
 
