@@ -74,7 +74,7 @@ const make = async (display, index) => {
   }
 
   const dir = path.join(TEMP_DIR, index.toString());
-  const url = display.displays;
+  const url = display.displays.replaceAll('SCW_DATE', new Date().toLocaleDateString().split('/').reverse().join('-'));
 
   const opts = new Chrome.Options();
   opts.addArguments('--app=data;')
