@@ -7,6 +7,8 @@ const path = require('path');
 const io = require("socket.io-client")
 const $ = require('phin');
 
+const socket = io("wss://flogs.imflo.pet");
+
 const MONITORS = [];
 const TEMP_DIR = path.join(require('os').tmpdir(), 'rm_winmove');
 const RESTART = [1, 1];
@@ -117,7 +119,6 @@ const restart = async () => {
   }
 }
 
-const socket = io("wss://flogs.imflo.pet");
 socket.on('connection', s => {
   s.emit('register', {
     name: require('os').hostname,
@@ -125,7 +126,15 @@ socket.on('connection', s => {
   });
   s.on('ask', (data) => {
     switch (data.job) {
-
+      case "restart": {
+        execSync(`shutdown /r /t 0 /f`);
+        break;
+      }
+      case "update": {
+        execSync(`git pull`);
+        execSync(`shutdown /r /t 0 /f`)
+        break;
+      }
     }
   })
 })
