@@ -15,6 +15,13 @@ const RESTART = [1, 1];
 const RESTART_TARGET = 2;
 const TRYING = false;
 
+const console = {
+  log: (msg) => {
+    socket.emit('log', msg);
+    process.stdout.write(msg + '\n');
+  }
+}
+
 const prelude = async () => {
 
   MONITORS.push(...JSON.parse(await (execSync(path.join(__dirname, 'scw.exe'))).toString()));
@@ -28,7 +35,7 @@ const prelude = async () => {
 
   setInterval(restart, 1 * 1000);
 };
-    
+
 const spawn_split = (dimensions, displays, index, id) => {
   let rows = displays.map(d => d.span.row[1]).sort().reverse()[0];
   let cols = displays.map(d => d.span.col[1]).sort().reverse()[0];
