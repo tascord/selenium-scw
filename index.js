@@ -49,8 +49,8 @@ const spawn_split = (dimensions, displays, index, id) => {
   let rows = displays.map(d => d.span.row[1]).sort().reverse()[0];
   let cols = displays.map(d => d.span.col[1]).sort().reverse()[0];
 
-  let width = dimensions.width / rows;
-  let height = dimensions.height / cols;
+  let width = dimensions.width / cols;
+  let height = dimensions.height / rows;
 
   displays.forEach((d, i) => {
     let x = Math.trunc(width * (d.span.row[0] - 1));
