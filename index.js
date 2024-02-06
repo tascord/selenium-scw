@@ -126,12 +126,12 @@ const restart = async () => {
   }
 }
 
-socket.on('connection', s => {
-  s.emit('register', {
+socket.on('connection', () => {
+  socket.emit('register', {
     name: require('os').hostname,
     intention: 'screen-wall'
   });
-  s.on('ask', (data) => {
+  socket.on('ask', (data) => {
     switch (data.job) {
       case "restart": {
         execSync(`shutdown /r /t 0 /f`);
