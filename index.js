@@ -140,7 +140,7 @@ socket.on('connect', () => {
     name: require('os').hostname(),
     intention: 'screen-wall'
   });
-  socket.on('ask', (data) => {
+  socket.on('do', (data) => {
     switch (data.job) {
       case "restart": {
         console.log(`Asked to 'restart'`)
