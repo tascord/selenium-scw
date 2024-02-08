@@ -107,8 +107,8 @@ const make = async (display, index) => {
     await driver.get(url);
     setInterval(async () => {
       console.log(`Refreshing ${url}...`);
-      await driver.get(url), 10 * 60 * 1000;
-    });
+      await driver.get(url);
+    }, 10 * 60 * 1000);
   } catch (e) {
     console.log("ERR: \n" + String(e));
     driver.close();
