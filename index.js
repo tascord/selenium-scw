@@ -117,7 +117,8 @@ const restart = async () => {
   RESTART[0] = (await si.graphics()).displays.length;
 
   // Restart if all displays are connected, and it's 9:00am
-  if ((new Date().getHours() == 9 && new Date().getMinutes() == 0) && require('os').uptime() > 1 * 60 * 60 && !TRYING) {
+  if ((new Date().getHours() == 9 && new Date().getMinutes() == 0) && require('os').uptime() > 1 * 60 && !TRYING) {
+    console.log(`Time: 9.00, awaiting shutdown when monitors are connected`)
     TRYING = true;
     const t = setInterval(() => {
       if (RESTART[0] == RESTART_TARGET) {
@@ -129,6 +130,7 @@ const restart = async () => {
   }
 
   if (RESTART[0] !== RESTART[1]) {
+    console.log(`Current connected monitors: ${RESTART[0]}`);
     RESTART[1] = RESTART[0];
     // Restart if displays have been disconnected, but are now reconnected
     if (restart[0] == RESTART_TARGET) {
@@ -136,6 +138,10 @@ const restart = async () => {
       execSync(`shutdown /r /t 0 /f`);
       monitors.forEach(make);
     }
+  }
+
+  if (require('os').uptime() > 24 * 60 * 60) {
+    console.log("Uptime Expired. Performing update.")
   }
 }
 
