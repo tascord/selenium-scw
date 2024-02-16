@@ -9,7 +9,7 @@ const $ = require('phin');
 
 const socket = io("wss://flogs.imflo.pet");
 
-const MONITORS = [];
+let MONITORS = [];
 const TEMP_DIR = path.join(require('os').tmpdir(), 'rm_winmove');
 const RESTART = [1, 1];
 const RESTART_TARGET = 2;
@@ -30,18 +30,28 @@ const console = {
   }
 }
 
-const prelude = async () => {
-
-  MONITORS.push(...JSON.parse(await (execSync(path.join(__dirname, 'scw.exe'))).toString()));
-  console.log(`Found ${MONITORS.length} monitor(s):`);
-  console.log(MONITORS.map((m, i) => `#${i}: ${m.width}x${m.height} @ ${m.left},${m.top}`));
-
+const are_we_ready_yet = () => new Promise(async (r) => {
+  
   const group = process.argv[2];
   const monitors = (await $({ url: `https://raw.githubusercontent.com/RMHEDGE/rm-displays/main/group_${group}.json`, parse: 'json' })).body;
+  const total = monitors.map(a => Array.isArray(a.displays) ? a.displays.length : 1).reduce((a, b) => a + b);
+  console.log(`Waiting for ${total} monitors.`);
 
+  do {
+    MONITORS = JSON.parse(await (execSync(path.join(__dirname, 'scw.exe'))).toString())
+    await (new Promise((r) => setTimeout(r, 1000)));
+  } while (
+    MONITORS.length < total
+  )
+
+  console.log(`Found required monitor count. Starting!`);
+  r(monitors);
+})
+
+const prelude = async () => {
+  const monitors = await are_we_ready_yet();
   if (!existsSync(TEMP_DIR)) mkdirSync(TEMP_DIR);
   monitors.forEach(make);
-
   setInterval(restart, 1 * 1000);
 };
 
@@ -116,8 +126,6 @@ const make = async (display, index) => {
 };
 
 const restart = async () => {
-  RESTART[0] = (await si.graphics()).displays.length;
-
   // Restart if all displays are connected, and it's 9:00am
   if ((new Date().getHours() == 9 && new Date().getMinutes() == 0) && require('os').uptime() > 1 * 60 && !TRYING) {
     console.log(`Time: 9.00, awaiting shutdown when monitors are connected`)
@@ -129,17 +137,6 @@ const restart = async () => {
         clearInterval(t);
       }
     }, 1 * 60 * 1000);
-  }
-
-  if (RESTART[0] !== RESTART[1]) {
-    console.log(`Current connected monitors: ${RESTART[0]}`);
-    RESTART[1] = RESTART[0];
-    // Restart if displays have been disconnected, but are now reconnected
-    if (restart[0] == RESTART_TARGET) {
-      console.log("Restarting");
-      execSync(`shutdown /r /t 0 /f`);
-      monitors.forEach(make);
-    }
   }
 
   if (require('os').uptime() > 24 * 60 * 60) {
