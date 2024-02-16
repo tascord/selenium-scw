@@ -34,7 +34,7 @@ const are_we_ready_yet = () => new Promise(async (r) => {
   
   const group = process.argv[2];
   const monitors = (await $({ url: `https://raw.githubusercontent.com/RMHEDGE/rm-displays/main/group_${group}.json`, parse: 'json' })).body;
-  const total = monitors.map(a => Array.isArray(a.displays) ? a.displays.length : 1).reduce((a, b) => a + b);
+  const total = monitors.length;
   console.log(`Waiting for ${total} monitors.`);
 
   do {
