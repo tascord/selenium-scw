@@ -31,7 +31,7 @@ const console = {
 }
 
 const are_we_ready_yet = () => new Promise(async (r) => {
-  
+
   const group = process.argv[2];
   const monitors = (await $({ url: `https://raw.githubusercontent.com/RMHEDGE/rm-displays/main/group_${group}.json`, parse: 'json' })).body;
   const total = monitors.length;
@@ -84,7 +84,7 @@ const make = async (display, index) => {
   }
 
   const dir = path.join(TEMP_DIR, index.toString());
-  const url = display.displays.replaceAll('SCW_DATE', new Date().toLocaleDateString().split('/').reverse().join('-'));
+  const url = display.displays.replaceAll('SCW_DATE', new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toLocaleDateString().split('/').reverse().join('-'));
 
   const opts = new Chrome.Options();
   opts.addArguments('--app=https://google.com')
