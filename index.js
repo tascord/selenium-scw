@@ -84,7 +84,7 @@ const make = async (display, index) => {
   }
 
   const dir = path.join(TEMP_DIR, index.toString());
-  const url = display.displays.replaceAll('SCW_DATE', new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toLocaleDateString().split('/').reverse().join('-'));
+  const url = display.displays.replaceAll('SCW_DATE', new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toLocaleDateString().split('/').reverse().join('-'));
 
   const opts = new Chrome.Options();
   opts.addArguments('--app=https://google.com')
